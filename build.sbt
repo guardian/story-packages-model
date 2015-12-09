@@ -49,6 +49,6 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
     releaseStepTask(PgpKeys.publishSigned),
     setNextVersion,
     commitNextVersion,
-    releaseStepCommand("sonatypeReleaseAll"),
-    pushChanges
+    releaseStepCommand("sonatypeReleaseAll")
+    //pushChanges
 )
