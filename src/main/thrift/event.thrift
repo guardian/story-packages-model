@@ -1,4 +1,4 @@
-namespace scala com.gu.storypackage.thrift
+namespace scala storypackage.thrift
 
 /* The event type describe the resource state ii*/
 enum EventType {
