@@ -23,15 +23,15 @@ crossScalaVersions := Seq("2.10.4", "2.11.7")
 scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
     "scm:git:git@github.com:guardian/story-packages-model.git"))
 
-description := "Java library built from Content-atom thrift definition"
+description := "Story package model"
 
 pomExtra := (
-    <url>https://github.com/guardian/content-atom</url>
+    <url>https://github.com/guardian/story-packages-model</url>
     <developers>
         <developer>
-            <id>paulmr</id>
-            <name>Paul Roberts</name>
-            <url>https://github.com/paulmr</url>
+            <id>Reettaphant</id>
+            <name>Reetta Vaahtoranta</name>
+            <url>https://github.com/guardian</url>
         </developer>
     </developers>
     )
