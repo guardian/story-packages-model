@@ -1,4 +1,4 @@
-namespace scala thrift
+namespace scala storypackage.thrift
 
 /* The event type describe the resource state ii*/
 enum EventType {
@@ -32,23 +32,21 @@ struct Article {
 
     7: optional bool isBoosted;
 
-    8: optional bool isBreaking;
+    8: optional bool imageHide;
 
-    9: optional bool imageHide;
+    9: optional bool showMainVideo;
 
-    10: optional bool showMainVideo;
+    10: optional bool showKickerTag;
 
-    11: optional bool showKickerTag;
+    11: optional bool showKickerSection;
 
-    12: optional bool showKickerSection;
+    12: optional string byline;
 
-    13: optional string byline;
+    13: optional string imageCutoutSrc;
 
-    14: optional string imageCutoutSrc;
+    14: optional bool showBoostedHeadline;
 
-    15: optional bool showBoostedHeadline;
-
-    16: optional bool showQuotedHeadline;
+    15: optional bool showQuotedHeadline;
 }
 
 struct Event {
