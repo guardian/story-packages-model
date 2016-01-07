@@ -44,11 +44,9 @@ struct Article {
 
     13: optional string customKicker;
 
-    14: optional string imageCutoutSrc;
+    14: optional bool showBoostedHeadline;
 
-    15: optional bool showBoostedHeadline;
-
-    16: optional bool showQuotedHeadline;
+    15: optional bool showQuotedHeadline;
 }
 
 struct Event {
