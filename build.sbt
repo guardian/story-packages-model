@@ -16,7 +16,7 @@ libraryDependencies ++= Seq(
     "com.twitter" %% "scrooge-core" % "3.17.0"
 )
 
-crossScalaVersions := Seq("2.10.4", "2.11.7")
+crossScalaVersions := Seq("2.10.6", "2.11.7")
 
 // Publish settings
 
@@ -38,7 +38,9 @@ pomExtra := (
 
 licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
-    releaseProcess := Seq[ReleaseStep](
+releaseCrossBuild := true
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
+releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
@@ -46,7 +48,7 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    releaseStepTask(PgpKeys.publishSigned),
+    publishArtifacts,
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),
