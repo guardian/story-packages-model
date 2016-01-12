@@ -18,8 +18,10 @@ libraryDependencies ++= Seq(
 
 crossScalaVersions := Seq("2.10.6", "2.11.7")
 
-// Publish settings
+// Include the Thrift file in the published jar
+unmanagedResourceDirectories in Compile += baseDirectory.value / "src/main/thrift"
 
+// Publish settings
 scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
     "scm:git:git@github.com:guardian/story-packages-model.git"))
 
