@@ -1,11 +1,5 @@
 namespace scala com.gu.storypackage.model.v1
 
-/* The event type describe the resource state ii*/
-enum EventType {
-    Update = 1,
-    Delete = 2
-}
-
 /* Describes the types of articles that we can have */
 
 enum ArticleType {
@@ -48,14 +42,3 @@ struct Article {
 
     15: optional bool showQuotedHeadline;
 }
-
-struct Event {
-
-    1: required EventType eventType;
-
-    2: required string packageId;
-
-    3: required list<Article> articles;
-
-}
-
