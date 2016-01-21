@@ -14,7 +14,9 @@ struct Event {
 
     2: required string packageId;
 
-    3: required list<story_package_article.Article> articles;
+    3: required string lastModified;
+
+    4: required list<story_package_article.Article> articles;
 
 }
 
