@@ -1,4 +1,4 @@
-namespace scala com.gu.storypackage.model.v1
+#@namespace scala com.gu.storypackage.model.v1
 
 include "story_package_article.thrift"
 
@@ -14,9 +14,11 @@ struct Event {
 
     2: required string packageId;
 
-    3: required string lastModified;
+    3: required string packageName;
 
-    4: required list<story_package_article.Article> articles;
+    4: required string lastModified;
+
+    5: required list<story_package_article.Article> articles;
 
 }
 
