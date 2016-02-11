@@ -24,6 +24,7 @@ scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
 description := "Story package model"
 
 pomExtra := (
+    <url>https://github.com/guardian/story-packages-model</url>
     <developers>
         <developer>
             <id>Reettaphant</id>
