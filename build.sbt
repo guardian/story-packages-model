@@ -9,7 +9,7 @@ scroogeThriftOutputFolder in Compile := sourceManaged.value / "thrift"
 
 libraryDependencies ++= Seq(
     "org.apache.thrift" % "libthrift" % "0.9.3",
-    "com.twitter" %% "scrooge-core" % "4.3.0"
+    "com.twitter" %% "scrooge-core" % "4.5.0"
 )
 
 crossScalaVersions := Seq("2.10.6", "2.11.7")
