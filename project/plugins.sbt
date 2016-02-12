@@ -16,11 +16,11 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.3")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "0.8.3")
 
-addSbtPlugin("com.twitter" %% "scrooge-sbt-plugin" % "3.16.3")
+addSbtPlugin("com.twitter" %% "scrooge-sbt-plugin" % "4.5.0")
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.0")
 
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
 
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "1.0")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "1.1")
 
