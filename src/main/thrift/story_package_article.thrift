@@ -1,4 +1,5 @@
-namespace scala com.gu.storypackage.model.v1
+namespace java com.gu.storypackage.model.v1
+#@namespace scala com.gu.storypackage.model.v1
 
 /* Describes the types of articles that we can have */
 

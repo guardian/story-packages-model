@@ -1,3 +1,4 @@
+namespace java com.gu.storypackage.model.v1
 #@namespace scala com.gu.storypackage.model.v1
 
 include "story_package_article.thrift"
