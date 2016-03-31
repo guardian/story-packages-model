@@ -1,13 +1,57 @@
 import sbtrelease._
 import ReleaseStateTransformations._
 
-name := "story-packages-model"
-organization := "com.gu"
-scalaVersion := "2.11.7"
+val commonSettings = Seq(
+  organization := "com.gu",
+  scalaVersion := "2.11.7",
+  scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
+      "scm:git:git@github.com:guardian/story-packages-model.git")),
 
-lazy val root = (project in file(".")).settings(
+  pomExtra := (
+      <url>https://github.com/guardian/story-packages-model</url>
+      <developers>
+          <developer>
+              <id>Reettaphant</id>
+              <name>Reetta Vaahtoranta</name>
+              <url>https://github.com/guardian</url>
+          </developer>
+      </developers>
+      ),
+
+  licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      publishArtifacts,
+      setNextVersion,
+      commitNextVersion,
+      releaseStepCommand("sonatypeReleaseAll"),
+      pushChanges
+  )
+)
+
+lazy val root = (project in file("."))
+  .enablePlugins(CrossPerProjectPlugin)
+  .aggregate(thrift, scalaClasses)
+  .settings(commonSettings)
+  .settings(
+    publishArtifact := false
+  )
+
+lazy val scalaClasses = (project in file("scala"))
+.settings(commonSettings)
+.settings(
+  name := "story-packages-model",
   description := "Story package model",
-  scroogeThriftSourceFolder in Compile := baseDirectory.value / "thrift/src/main/thrift",
+  scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
   scroogeThriftOutputFolder in Compile := sourceManaged.value,
   libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.9.3",
@@ -21,6 +65,7 @@ lazy val root = (project in file(".")).settings(
 
 lazy val thrift = (project in file("thrift"))
 .disablePlugins(ScroogeSBT)
+.settings(commonSettings)
 .settings(
   name := "story-packages-model-thrift",
   description := "Story package model Thrift files",
@@ -31,36 +76,3 @@ lazy val thrift = (project in file("thrift"))
 )
 
 
-// Publish settings
-scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
-    "scm:git:git@github.com:guardian/story-packages-model.git"))
-
-pomExtra := (
-    <url>https://github.com/guardian/story-packages-model</url>
-    <developers>
-        <developer>
-            <id>Reettaphant</id>
-            <name>Reetta Vaahtoranta</name>
-            <url>https://github.com/guardian</url>
-        </developer>
-    </developers>
-    )
-
-licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
-
-releaseCrossBuild := true
-releasePublishArtifactsAction := PgpKeys.publishSigned.value
-releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    setNextVersion,
-    commitNextVersion,
-    releaseStepCommand("sonatypeReleaseAll"),
-    pushChanges
-)
