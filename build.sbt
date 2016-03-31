@@ -5,23 +5,35 @@ name := "story-packages-model"
 organization := "com.gu"
 scalaVersion := "2.11.7"
 
-scroogeThriftOutputFolder in Compile := sourceManaged.value / "thrift"
-
-libraryDependencies ++= Seq(
-    "org.apache.thrift" % "libthrift" % "0.9.3",
-    "com.twitter" %% "scrooge-core" % "4.5.0"
+lazy val root = (project in file(".")).settings(
+  description := "Story package model",
+  scroogeThriftSourceFolder in Compile := baseDirectory.value / "thrift/src/main/thrift",
+  scroogeThriftOutputFolder in Compile := sourceManaged.value,
+  libraryDependencies ++= Seq(
+      "org.apache.thrift" % "libthrift" % "0.9.3",
+      "com.twitter" %% "scrooge-core" % "4.5.0"
+  ),
+  crossScalaVersions := Seq("2.10.6", "2.11.7"),
+  managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
+  // Include the Thrift file in the published jar
+  scroogePublishThrift in Compile := true
 )
 
-crossScalaVersions := Seq("2.10.6", "2.11.7")
+lazy val thrift = (project in file("thrift"))
+.disablePlugins(ScroogeSBT)
+.settings(
+  name := "story-packages-model-thrift",
+  description := "Story package model Thrift files",
+  crossPaths := false,
+  publishArtifact in packageDoc := false,
+  publishArtifact in packageSrc := false,
+  unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
+)
 
-// Include the Thrift file in the published jar
-unmanagedResourceDirectories in Compile += baseDirectory.value / "src/main/thrift"
 
 // Publish settings
 scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
     "scm:git:git@github.com:guardian/story-packages-model.git"))
-
-description := "Story package model"
 
 pomExtra := (
     <url>https://github.com/guardian/story-packages-model</url>
