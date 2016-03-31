@@ -20,7 +20,6 @@ val commonSettings = Seq(
 
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
 
-  releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
@@ -39,7 +38,6 @@ val commonSettings = Seq(
 )
 
 lazy val root = (project in file("."))
-  .enablePlugins(CrossPerProjectPlugin)
   .aggregate(thrift, scalaClasses)
   .settings(commonSettings)
   .settings(
@@ -47,32 +45,31 @@ lazy val root = (project in file("."))
   )
 
 lazy val scalaClasses = (project in file("scala"))
-.settings(commonSettings)
-.settings(
-  name := "story-packages-model",
-  description := "Story package model",
-  scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
-  scroogeThriftOutputFolder in Compile := sourceManaged.value,
-  libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % "0.9.3",
-      "com.twitter" %% "scrooge-core" % "4.5.0"
-  ),
-  crossScalaVersions := Seq("2.10.6", "2.11.7"),
-  managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
-  // Include the Thrift file in the published jar
-  scroogePublishThrift in Compile := true
-)
+  .settings(commonSettings)
+  .settings(
+    name := "story-packages-model",
+    description := "Story package model",
+    scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
+    scroogeThriftOutputFolder in Compile := sourceManaged.value,
+    libraryDependencies ++= Seq(
+        "org.apache.thrift" % "libthrift" % "0.9.3",
+        "com.twitter" %% "scrooge-core" % "4.5.0"
+    ),
+    managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
+    // Include the Thrift file in the published jar
+    scroogePublishThrift in Compile := true
+  )
 
 lazy val thrift = (project in file("thrift"))
-.disablePlugins(ScroogeSBT)
-.settings(commonSettings)
-.settings(
-  name := "story-packages-model-thrift",
-  description := "Story package model Thrift files",
-  crossPaths := false,
-  publishArtifact in packageDoc := false,
-  publishArtifact in packageSrc := false,
-  unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
-)
+  .disablePlugins(ScroogeSBT)
+  .settings(commonSettings)
+  .settings(
+    name := "story-packages-model-thrift",
+    description := "Story package model Thrift files",
+    crossPaths := false,
+    publishArtifact in packageDoc := false,
+    publishArtifact in packageSrc := false,
+    unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
+  )
 
 
