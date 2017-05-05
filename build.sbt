@@ -53,7 +53,7 @@ lazy val scalaClasses = (project in file("scala"))
     scroogeThriftOutputFolder in Compile := sourceManaged.value,
     libraryDependencies ++= Seq(
         "org.apache.thrift" % "libthrift" % "0.9.3",
-        "com.twitter" %% "scrooge-core" % "4.5.0"
+        "com.twitter" %% "scrooge-core" % "4.12.0"
     ),
     managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
     // Include the Thrift file in the published jar
