@@ -53,7 +53,7 @@ lazy val scalaClasses = (project in file("scala"))
     scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
     scroogeThriftOutputFolder in Compile := sourceManaged.value,
     libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.9.3",
+        "org.apache.thrift" % "libthrift" % "0.9.2",
         "com.twitter" %% "scrooge-core" % "4.12.0"
     ),
     managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
