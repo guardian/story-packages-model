@@ -3,8 +3,8 @@ import ReleaseStateTransformations._
 
 val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.11.11", "2.12.3"),
+  scalaVersion := "2.12.8",
+  crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
       "scm:git:git@github.com:guardian/story-packages-model.git")),
 
@@ -33,7 +33,7 @@ val commonSettings = Seq(
       publishArtifacts,
       setNextVersion,
       commitNextVersion,
-      releaseStepCommand("sonatypeReleaseAll"),
+      releaseStepCommand("sonatypeRelease"),
       pushChanges
   )
 )
@@ -53,8 +53,8 @@ lazy val scalaClasses = (project in file("scala"))
     scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
     scroogeThriftOutputFolder in Compile := sourceManaged.value,
     libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.9.2",
-        "com.twitter" %% "scrooge-core" % "4.12.0"
+        "org.apache.thrift" % "libthrift" % "0.10.0",
+        "com.twitter" %% "scrooge-core" % "19.3.0"
     ),
     managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
     // Include the Thrift file in the published jar
