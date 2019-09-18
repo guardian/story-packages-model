@@ -15,7 +15,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.18")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.9")
 
-addSbtPlugin("com.twitter" %% "scrooge-sbt-plugin" % "19.3.0")
+addSbtPlugin("com.twitter" %% "scrooge-sbt-plugin" % "19.9.0")
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
 
