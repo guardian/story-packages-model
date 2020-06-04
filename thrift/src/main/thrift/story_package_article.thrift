@@ -1,5 +1,6 @@
 namespace java com.gu.storypackage.model.v1
 #@namespace scala com.gu.storypackage.model.v1
+#@namespace typescript _at_guardian.story_packages_model.v1
 
 /* Describes the types of articles that we can have */
 
