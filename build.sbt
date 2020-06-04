@@ -3,8 +3,8 @@ import ReleaseStateTransformations._
 
 val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.13.1",
-  crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
+  scalaVersion := "2.13.2",
+  crossScalaVersions := Seq("2.11.12", "2.12.11", "2.13.2"),
   scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
       "scm:git:git@github.com:guardian/story-packages-model.git")),
 
