@@ -56,7 +56,7 @@ lazy val scalaClasses = (project in file("scala"))
     scroogeThriftOutputFolder in Compile := sourceManaged.value,
     libraryDependencies ++= Seq(
         "org.apache.thrift" % "libthrift" % "0.12.0",
-        "com.twitter" %% "scrooge-core" % "19.9.0",
+        "com.twitter" %% "scrooge-core" % "20.4.1",
         "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
     ),
     // Include the Thrift file in the published jar
@@ -75,4 +75,18 @@ lazy val thrift = (project in file("thrift"))
     unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
   )
 
+lazy val typescriptClasses = (project in file("ts"))
+  .enablePlugins(ScroogeTypescriptGen)
+  .settings(commonSettings)
+  .settings(
+    publishArtifact := false,
+    name := "story-packages-typescript",
+    scroogeTypescriptNpmPackageName := "@guardian/story-packages-model",
+    Compile / scroogeDefaultJavaNamespace := scroogeTypescriptNpmPackageName.value,
+    Test / scroogeDefaultJavaNamespace := scroogeTypescriptNpmPackageName.value,
+    description := "Typescript library built from the story packages thrift definition",
 
+    Compile / scroogeLanguages := Seq("typescript"),
+    scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
+    scroogeTypescriptPackageLicense := "Apache-2.0"
+  )
