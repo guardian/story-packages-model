@@ -52,17 +52,17 @@ lazy val scalaClasses = (project in file("scala"))
   .settings(
     name := "story-packages-model",
     description := "Story package model",
-    scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
-    scroogeThriftOutputFolder in Compile := sourceManaged.value,
+    Compile / scroogeThriftSourceFolder := baseDirectory.value / "../thrift/src/main/thrift",
+    Compile / scroogeThriftOutputFolder := sourceManaged.value,
     libraryDependencies ++= Seq(
         "org.apache.thrift" % "libthrift" % "0.12.0",
         "com.twitter" %% "scrooge-core" % "21.3.0",
         "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
     ),
     // Include the Thrift file in the published jar
-    scroogePublishThrift in Compile := true,
-    scroogeThriftIncludeRoot in Compile := false,
-    excludeLintKeys in Global += scroogeThriftIncludeRoot
+    Compile / scroogePublishThrift := true,
+    Compile / scroogeThriftIncludeRoot := false,
+    Global / excludeLintKeys += scroogeThriftIncludeRoot
   )
 
 lazy val thrift = (project in file("thrift"))
@@ -72,9 +72,9 @@ lazy val thrift = (project in file("thrift"))
     name := "story-packages-model-thrift",
     description := "Story package model Thrift files",
     crossPaths := false,
-    publishArtifact in packageDoc := false,
-    publishArtifact in packageSrc := false,
-    unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
+    packageDoc / publishArtifact := false,
+    packageSrc / publishArtifact := false,
+    Compile / unmanagedResourceDirectories += { baseDirectory.value / "src/main/thrift" }
   )
 
 lazy val typescriptClasses = (project in file("ts"))
@@ -89,6 +89,6 @@ lazy val typescriptClasses = (project in file("ts"))
     description := "Typescript library built from the story packages thrift definition",
 
     Compile / scroogeLanguages := Seq("typescript"),
-    scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
+    Compile / scroogeThriftSourceFolder := baseDirectory.value / "../thrift/src/main/thrift",
     scroogeTypescriptPackageLicense := "Apache-2.0"
   )
