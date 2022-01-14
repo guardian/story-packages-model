@@ -1,27 +1,35 @@
 import sbtrelease._
 import ReleaseStateTransformations._
 
+val thriftVersion = "0.15.0"
+val scroogeVersion = "21.12.0"
+
 val commonSettings = Seq(
   organization := "com.gu",
   scalaVersion := "2.13.2",
-  crossScalaVersions := Seq("2.11.12", "2.12.11", "2.13.2"),
+  crossScalaVersions := Seq("2.12.11", scalaVersion.value),
   releaseCrossBuild := true,
   scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
       "scm:git:git@github.com:guardian/story-packages-model.git")),
 
   pomExtra := (
-      <url>https://github.com/guardian/story-packages-model</url>
-      <developers>
-          <developer>
-              <id>Reettaphant</id>
-              <name>Reetta Vaahtoranta</name>
-              <url>https://github.com/guardian</url>
-          </developer>
-      </developers>
-      ),
+    <url>https://github.com/guardian/story-packages-model</url>
+    <developers>
+      <developer>
+          <id>Reettaphant</id>
+          <name>Reetta Vaahtoranta</name>
+          <url>https://github.com/guardian</url>
+      </developer>
+      <developer>
+        <id>justinpinner</id>
+        <name>Justin Pinner</name>
+        <url>https://github.com/justinpinner</url>
+      </developer>
+    </developers>
+  ),
 
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-  publishTo := sonatypePublishTo.value,
+  publishTo := sonatypePublishToBundle.value,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseProcess := Seq[ReleaseStep](
@@ -35,7 +43,8 @@ val commonSettings = Seq(
       publishArtifacts,
       setNextVersion,
       commitNextVersion,
-      releaseStepCommand("sonatypeRelease"),
+      releaseStepCommandAndRemaining("+publishSigned"),
+      releaseStepCommand("sonatypeBundleRelease"),
       pushChanges
   )
 )
@@ -55,8 +64,8 @@ lazy val scalaClasses = (project in file("scala"))
     Compile / scroogeThriftSourceFolder := baseDirectory.value / "../thrift/src/main/thrift",
     Compile / scroogeThriftOutputFolder := sourceManaged.value,
     libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.12.0",
-        "com.twitter" %% "scrooge-core" % "21.3.0",
+        "org.apache.thrift" % "libthrift" % thriftVersion,
+        "com.twitter" %% "scrooge-core" % scroogeVersion,
         "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
     ),
     // Include the Thrift file in the published jar
