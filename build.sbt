@@ -25,46 +25,17 @@ lazy val mavenSettings = Seq(
   publishConfiguration := publishConfiguration.value.withOverwrite(true)
 )
 
-val snapshotReleaseType = "snapshot"
-
-lazy val releaseProcessSteps: Seq[ReleaseStep] = {
-  val commonSteps: Seq[ReleaseStep] = Seq(
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    runTest,
-    setReleaseVersion,
-  )
-
-  val localExtraSteps: Seq[ReleaseStep] = Seq(
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    setNextVersion,
-    commitNextVersion
-  )
-
-  val snapshotSteps: Seq[ReleaseStep] = Seq(
-    publishArtifacts,
-    releaseStepCommand("sonatypeReleaseAll")
-  )
-
-  val prodSteps: Seq[ReleaseStep] = Seq(
-    releaseStepCommandAndRemaining("+publishSigned"),
-    releaseStepCommand("sonatypeBundleRelease")
-  )
-
-  val localPostRelease: Seq[ReleaseStep] = Seq(
-    pushChanges,
-  )
-
-  (sys.props.get("RELEASE_TYPE"), sys.env.get("CI")) match {
-    case (Some(v), None) if v == snapshotReleaseType => commonSteps ++ localExtraSteps ++ snapshotSteps ++ localPostRelease
-    case (_, None) => commonSteps ++ localExtraSteps ++ prodSteps ++ localPostRelease
-    case (Some(v), _) if v == snapshotReleaseType => commonSteps ++ snapshotSteps
-    case (_, _) => commonSteps ++ prodSteps
-  }
-}
+lazy val releaseProcessSteps: Seq[ReleaseStep] = Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  setNextVersion,
+  commitNextVersion
+)
 
 val commonSettings = Seq(
   organization := "com.gu",
@@ -72,8 +43,7 @@ val commonSettings = Seq(
   crossScalaVersions := Seq("2.12.11", scalaVersion.value),
   releaseCrossBuild := true,
   scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
-    "scm:git:git@github.com:guardian/story-packages-model.git")),
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value
+    "scm:git:git@github.com:guardian/story-packages-model.git"))
 ) ++ mavenSettings
 
 lazy val root = (project in file("."))
