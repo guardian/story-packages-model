@@ -8,7 +8,7 @@ val snapshotReleaseType = "snapshot"
 val snapshotReleaseSuffix = "-SNAPSHOT"
 
 val betaReleaseType = "beta"
-val betaReleaseSuffix = "-BETA"
+val betaReleaseSuffix = "-beta.0"
 
 lazy val versionSettingsMaybe = {
   sys.props.get("RELEASE_TYPE").map {
