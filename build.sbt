@@ -4,12 +4,16 @@ import ReleaseStateTransformations._
 val thriftVersion = "0.15.0"
 val scroogeVersion = "22.1.0"
 
+val snapshotReleaseType = "snapshot"
+val snapshotReleaseSuffix = "-SNAPSHOT"
+
 val betaReleaseType = "beta"
 val betaReleaseSuffix = "-beta.0"
 
 lazy val versionSettingsMaybe = {
   sys.props.get("RELEASE_TYPE").map {
-    case v if v == betaReleaseType => betaReleaseSuffix
+    case v if v == snapshotReleaseType => snapshotReleaseSuffix
+    case _ => ""
   }.map { suffix =>
     releaseVersion := {
       ver => Version(ver).map(_.withoutQualifier.string).map(_.concat(suffix)).getOrElse(versionFormatError(ver))
@@ -38,65 +42,21 @@ lazy val mavenSettings = Seq(
   publishConfiguration := publishConfiguration.value.withOverwrite(true)
 )
 
-lazy val checkReleaseType: ReleaseStep = ReleaseStep({ st: State =>
-  val releaseType = sys.props.get("RELEASE_TYPE").map {
-    case v if v == betaReleaseType => betaReleaseType.toUpperCase
-  }.getOrElse("PRODUCTION")
+lazy val commonReleaseProcess = Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  setReleaseVersion,
+  runClean,
+  runTest,
+  // For non cross-build projects, use releaseStepCommand("publishSigned")
+  releaseStepCommandAndRemaining("+publishSigned")
+)
 
-  SimpleReader.readLine(s"This will be a $releaseType release. Continue? [y/N]: ") match {
-    case Some(v) if Seq("Y", "YES").contains(v.toUpperCase) => // we don't care about the value - it's a flow control mechanism
-    case _ => sys.error(s"Release aborted by user!")
-  }
-  // we haven't changed state, just pass it on if we haven't thrown an error from above
-  st
-})
+lazy val productionReleaseProcess = commonReleaseProcess ++ Seq[ReleaseStep](
+  releaseStepCommand("sonatypeBundleRelease")
+)
 
-lazy val releaseProcessSteps: Seq[ReleaseStep] = {
-  val commonSteps: Seq[ReleaseStep] = Seq(
-    checkReleaseType,
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    runTest
-  )
-
-  val prodSteps: Seq[ReleaseStep] = Seq(
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    releaseStepCommandAndRemaining("+publishSigned"),
-    releaseStepCommand("sonatypeBundleRelease"),
-    setNextVersion,
-    commitNextVersion,
-    pushChanges
-  )
-
-  /*
-  Beta assemblies can be published to Sonatype and Maven.
-
-  To make this work, start SBT with the beta RELEASE_TYPE variable set;
-    sbt -DRELEASE_TYPE=beta
-
-  This gets around the "problem" of sbt-sonatype assuming that a -SNAPSHOT build should not be delivered to Maven.
-
-  In this mode, the version number will be presented as e.g. 1.2.3-beta.n, but the git tagging and version-updating
-  steps are not triggered, so it's up to the developer to keep track of what was released and manipulate subsequent
-  release and next versions appropriately.
-  */
-  val betaSteps: Seq[ReleaseStep] = Seq(
-    setReleaseVersion,
-    releaseStepCommandAndRemaining("+publishSigned"),
-    releaseStepCommand("sonatypeBundleRelease"),
-    setNextVersion
-  )
-
-  commonSteps ++ (sys.props.get("RELEASE_TYPE") match {
-    case Some(v) if v == betaReleaseType => betaSteps // this enables a release candidate build to sonatype and Maven
-    case None => prodSteps  // our normal deploy route
-  })
-
-}
+lazy val snapshotReleaseProcess = commonReleaseProcess
 
 val commonSettings = Seq(
   organization := "com.gu",
@@ -113,7 +73,12 @@ lazy val root = (project in file("."))
   .settings(commonSettings)
   .settings(
     publishArtifact := false,
-    releaseProcess := releaseProcessSteps
+    releaseProcess := {
+      sys.props.get("RELEASE_TYPE") match {
+        case Some("production") => productionReleaseProcess
+        case _ => snapshotReleaseProcess
+      }
+    }
   )
 
 lazy val scalaClasses = (project in file("scala"))
