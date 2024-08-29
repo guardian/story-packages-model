@@ -100,7 +100,7 @@ lazy val releaseProcessSteps: Seq[ReleaseStep] = {
 
 val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.13.2",
+  scalaVersion := "2.13.14",
   crossScalaVersions := Seq("2.12.11", scalaVersion.value),
   releaseCrossBuild := true,
   scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-packages-model"),
